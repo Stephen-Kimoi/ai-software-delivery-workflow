@@ -1,0 +1,60 @@
+[
+  {
+    "id": "F01",
+    "behavior": "POST /signup rejects a request from an IP that has already made 5 signups in the trailing 60 minutes with 429 Too Many Requests; the counter is stored in Redis with a sliding TTL keyed by IP, not in-process memory (so it survives a process restart and works across multiple app instances)",
+    "verification": "pytest tests/test_rate_limit.py -v",
+    "layers": [
+      {
+        "label": "Layer 1 — Syntax & Static",
+        "cmd": "make lint",
+        "repair": "Run 'make lint' and fix each reported violation."
+      },
+      {
+        "label": "Layer 2 — Runtime Behavior",
+        "cmd": "pytest tests/test_rate_limit.py -v",
+        "repair": "If the 6th request in a window isn't rejected: check the Redis key TTL is being reset correctly (INCR + EXPIRE, not EXPIRE-only). If it's rejecting on cold start: check the counter defaults to 0, not undefined, on the first request from a new IP."
+      },
+      {
+        "label": "Layer 3 — Multi-instance behavior",
+        "cmd": "docker compose -f docker-compose.test.yml up -d && sleep 2 && pytest tests/test_rate_limit_distributed.py -v; code=$?; docker compose -f docker-compose.test.yml down; exit $code",
+        "repair": "If the limit resets between requests routed to different app instances: the counter is probably in-process (e.g. a plain dict) instead of the shared Redis store — grep for any in-memory fallback and remove it."
+      }
+    ],
+    "state": "passing",
+    "evidence": "commit a1b2c3d, verified 2026-06-18",
+    "notes": "Limit and window are configurable via SIGNUP_RATE_LIMIT and SIGNUP_RATE_WINDOW_SECONDS env vars, defaulting to 5/3600. Do not hardcode either value in the handler."
+  },
+  {
+    "id": "F02",
+    "behavior": "Admin dashboard's 'Export users' button streams a CSV of all users (id, email, created_at, plan) without loading the full table into memory — must handle a 500k-row table without the request timing out or the process OOMing",
+    "verification": "pytest tests/test_export.py -v",
+    "layers": [
+      {
+        "label": "Layer 1 — Syntax & Static",
+        "cmd": "make lint",
+        "repair": "Run 'make lint' and fix reported violations."
+      },
+      {
+        "label": "Layer 2 — Runtime Behavior",
+        "cmd": "pytest tests/test_export.py -v",
+        "repair": "If memory usage spikes in the test: confirm the export uses a server-side cursor / chunked query (e.g. yield_per()) rather than .all() on the full queryset."
+      },
+      {
+        "label": "Layer 3 — Real deploy confirmation",
+        "cmd": "gh run list --branch main --limit 1 --json conclusion,name -q '.[] | select(.name == \"Deploy\") | .conclusion' | grep -q success",
+        "repair": "This layer checks that the most recent Deploy workflow run on main succeeded — it does not re-run the export itself. If it fails, check the Actions tab for the real failure before assuming this feature's code is at fault; it may be an unrelated deploy break that needs its own fix first."
+      }
+    ],
+    "state": "active",
+    "evidence": null,
+    "notes": "Layer 3 is deliberately a check against GitHub Actions' own run history, not prose like 'deploy and confirm it works manually' — see DECISIONS.example.md for why a human-only instruction can never legitimately pass through verify-feature.sh's eval-based layers."
+  },
+  {
+    "id": "F03",
+    "behavior": "When a webhook delivery fails (non-2xx or timeout), the worker retries with exponential backoff (1m, 5m, 30m, 2h, 12h) up to 5 attempts, then marks the delivery as 'dead' and surfaces it in the admin dashboard's Failed Deliveries tab",
+    "verification": "pytest tests/test_webhook_retry.py -v",
+    "state": "blocked",
+    "evidence": null,
+    "notes": "Blocked on F02's export infra — the Failed Deliveries tab reuses the same streaming-table component F02 introduces. Do not start the Planner/Verifier steps for F03 until F02 reaches 'passing'."
+  }
+]
