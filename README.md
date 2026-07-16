@@ -37,32 +37,7 @@ Choose the entry point that matches your host:
   ```
   Then use the `init`, `run`, and `verify` skills. Codex executes the same contract natively; it does not depend on Claude's `Workflow` tool.
 
-The manual setup below remains available when you want complete control over each file.
-
-1. Copy these files into your repo, keeping the paths:
-   ```
-   .claude/workflows/feature-4agent.js
-   scripts/verify-feature.sh
-   ```
-2. Copy `feature_list.example.json` → `feature_list.json` at your repo root, delete the example
-   entries, and add your own. Each feature needs `id`, `behavior`, `state` (`active` /
-   `passing` / `blocked`), and either a single `verification` command or a `layers` array
-   (`label`, `cmd`, optional `repair`). **`cmd` must be real, executable bash** — it gets
-   `eval`'d — not a prose description of a manual step.
-3. Add a `DECISIONS.md` and `AGENTS.md` (or equivalent) to your repo root — the Planner reads
-   these for precedent, and the Tester logs an entry after every feature.
-4. Run the workflow for one feature:
-   ```
-   Workflow({ name: 'feature-4agent', args: { featureId: 'F01' } })
-   ```
-   or, for a feature not yet in `feature_list.json`, pass `extraContext` describing what to build.
-5. Check a feature's state manually at any time:
-   ```
-   ./scripts/verify-feature.sh F01
-   ```
-
-The workflow returns `{ status: 'implemented', ... }` on success or
-`{ status: 'blocked_at_plan', ... }` if the Verifier couldn't sign off within 6 rounds.
+The workflow returns `{ status: 'implemented', ... }` on success or `{ status: 'blocked_at_plan', ... }` if the Verifier couldn't sign off within 6 rounds.
 
 ## Files
 
