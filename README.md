@@ -44,8 +44,7 @@ The workflow returns `{ status: 'implemented', ... }` on success or `{ status: '
 After installation, add a feature to `feature_list.json`, then send this end-to-end prompt:
 
 ```text
-Use the feature-4agent workflow end to end for feature F01. Read feature_list.json,
-AGENTS.md, and DECISIONS.md; have the Planner create the plan, the Verifier approve
+Use the feature-4agent workflow end to end for feature F01 (or describe the feature here). Read feature_list.json, AGENTS.md, and DECISIONS.md; have the Planner create the plan, the Verifier approve
 executable checks, the Implementer make the changes, and the Tester independently run
 all checks and record the result. Do not claim success unless every check passes and
 F01 is marked passing by the verification harness.
