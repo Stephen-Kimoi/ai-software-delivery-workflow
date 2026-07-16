@@ -18,8 +18,20 @@ A Claude Code workflow that ships one feature at a time through four independent
 Choose the entry point that matches your host:
 
 - **npm (recommended):** run `npx create-feature-4agent@latest` in the target repo. This installs the workflow, verifier, starter `feature_list.json`, `AGENTS.md`, and `DECISIONS.md` without overwriting existing files.
-- **Claude Code plugin:** add this repository as a marketplace, install `feature-4agent`, then run `/feature-4agent:init` and `/feature-4agent:run F01`.
-- **Codex plugin:** install `plugins/feature-4agent-codex` from this repository, then use its `init`, `run`, and `verify` skills. Codex executes the same contract natively; it does not depend on Claude's `Workflow` tool.
+- **Claude Code plugin:** add the GitHub marketplace and install the plugin:
+  ```bash
+  claude plugin marketplace add Stephen-Kimoi/turn-based-loop-workflow
+  claude plugin list
+  claude plugin install feature-4agent@turn-based-loop-workflow
+  ```
+  Then run `/feature-4agent:init` and `/feature-4agent:run F01`.
+- **Codex plugin:** add the repository marketplace and install the Codex adapter:
+  ```bash
+  codex plugin marketplace add https://github.com/Stephen-Kimoi/turn-based-loop-workflow
+  codex plugin list
+  codex plugin add feature-4agent-codex@turn-based-loop-workflow
+  ```
+  Confirm the plugin changes from `not installed` to installed with `codex plugin list`, then use the `init`, `run`, and `verify` skills. Codex executes the same contract natively; it does not depend on Claude's `Workflow` tool.
 
 The manual setup below remains available when you want complete control over each file.
 
