@@ -39,7 +39,39 @@ Choose the entry point that matches your host:
 
 The workflow returns `{ status: 'implemented', ... }` on success or `{ status: 'blocked_at_plan', ... }` if the Verifier couldn't sign off within 6 rounds.
 
-## Files
+## Using the workflow
+
+After installation, start with this prompt:
+
+```text
+Initialize the feature-4agent workflow in this repository. Read feature_list.json,
+AGENTS.md, and DECISIONS.md, then tell me what I need to provide for the first feature.
+```
+
+Add a feature to `feature_list.json`, for example:
+
+```json
+{
+  "id": "F01",
+  "behavior": "Add a health endpoint that returns HTTP 200 and {\"status\":\"ok\"}.",
+  "state": "active",
+  "verification": "curl -fsS http://localhost:3000/health | jq -e '.status == \"ok\"'"
+}
+```
+
+Run it with your host agent:
+
+- **Claude Code:** `/feature-4agent:run F01`
+- **Codex:** `Use the feature-4agent workflow to plan, verify, implement, and test feature F01.`
+
+Then verify independently:
+
+```text
+Verify feature F01. Run every executable verification layer, report the evidence,
+and do not mark it passing unless all layers succeed.
+```
+
+## File structure: 
 
 | File | Role |
 |---|---|
