@@ -1,6 +1,6 @@
 {
   "name": "create-feature-4agent",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Bootstrap the Planner-Verifier-Implementer-Tester workflow in a repository",
   "keywords": [
     "agentic-workflow",
@@ -9,6 +9,15 @@
     "feature-delivery",
     "workflow-automation"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Stephen-Kimoi/turn-based-loop-workflow.git",
+    "directory": "packages/create-feature-4agent"
+  },
+  "homepage": "https://github.com/Stephen-Kimoi/turn-based-loop-workflow#readme",
+  "bugs": {
+    "url": "https://github.com/Stephen-Kimoi/turn-based-loop-workflow/issues"
+  },
   "type": "module",
   "bin": {
     "create-feature-4agent": "bin/create-feature-4agent.js",
