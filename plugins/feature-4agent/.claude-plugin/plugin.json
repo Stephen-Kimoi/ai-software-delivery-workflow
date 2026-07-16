@@ -1,0 +1,8 @@
+{
+  "name": "feature-4agent",
+  "description": "Bootstrap and run a verified Planner-Verifier-Implementer-Tester feature workflow",
+  "version": "0.1.0",
+  "author": { "name": "Lablab AI" },
+  "repository": "https://github.com/lablab-ai/turn-based-loop-workflow",
+  "license": "MIT"
+}

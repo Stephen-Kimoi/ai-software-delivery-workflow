@@ -1,0 +1,16 @@
+{
+  "name": "create-feature-4agent",
+  "version": "0.1.0",
+  "description": "Bootstrap the Planner-Verifier-Implementer-Tester workflow in a repository",
+  "type": "module",
+  "bin": {
+    "create-feature-4agent": "bin/create-feature-4agent.js",
+    "feature-4agent": "bin/create-feature-4agent.js"
+  },
+  "files": ["bin", "templates", "README.md"],
+  "engines": {"node": ">=18"},
+  "scripts": {
+    "check": "node bin/create-feature-4agent.js check"
+  },
+  "license": "MIT"
+}

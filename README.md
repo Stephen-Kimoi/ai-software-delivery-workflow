@@ -1,9 +1,10 @@
 # Turn-based loop: Planner → Verifier → Implementer → Tester
 
 A Claude Code workflow that ships one feature at a time through four independent roles:
-**Planner** locks a design, **Verifier** checks it before code exists, **Implementer** builds it
-in an isolated worktree, **Tester** independently re-verifies and is the only role allowed to
-mark the feature "passing." No role trusts the previous role's self-report.
+1. **Planner** locks a design
+2. **Verifier** checks it before code exists
+3. **Implementer** builds it in an isolated [worktree](https://code.claude.com/docs/en/worktrees)
+4. **Tester** independently re-verifies and is the only role allowed to mark the feature "passing." No role trusts the previous role's self-report.
 
 ## Requirements
 
@@ -13,6 +14,14 @@ mark the feature "passing." No role trusts the previous role's self-report.
 - `git`
 
 ## Quickstart
+
+Choose the entry point that matches your host:
+
+- **npm (recommended):** run `npx create-feature-4agent@latest` in the target repo. This installs the workflow, verifier, starter `feature_list.json`, `AGENTS.md`, and `DECISIONS.md` without overwriting existing files.
+- **Claude Code plugin:** add this repository as a marketplace, install `feature-4agent`, then run `/feature-4agent:init` and `/feature-4agent:run F01`.
+- **Codex plugin:** install `plugins/feature-4agent-codex` from this repository, then use its `init`, `run`, and `verify` skills. Codex executes the same contract natively; it does not depend on Claude's `Workflow` tool.
+
+The manual setup below remains available when you want complete control over each file.
 
 1. Copy these files into your repo, keeping the paths:
    ```

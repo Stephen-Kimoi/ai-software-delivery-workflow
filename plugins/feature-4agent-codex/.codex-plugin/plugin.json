@@ -1,0 +1,26 @@
+{
+  "name": "feature-4agent-codex",
+  "version": "0.1.0",
+  "description": "Run and verify the Planner-Verifier-Implementer-Tester workflow from Codex.",
+  "author": {
+    "name": "Lablab AI",
+    "url": "https://github.com/lablab-ai"
+  },
+  "repository": "https://github.com/lablab-ai/turn-based-loop-workflow",
+  "license": "MIT",
+  "keywords": ["workflow", "feature delivery", "verification"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Feature 4agent Codex",
+    "shortDescription": "Run verified feature delivery loops in Codex.",
+    "longDescription": "Bootstrap and execute the Planner-Verifier-Implementer-Tester workflow with Codex-native skills.",
+    "developerName": "Lablab AI",
+    "category": "Productivity",
+    "capabilities": ["Write", "Interactive"],
+    "defaultPrompt": [
+      "Initialize the feature-4agent workflow",
+      "Run feature F01 through the verified loop",
+      "Verify feature F01"
+    ]
+  }
+}
