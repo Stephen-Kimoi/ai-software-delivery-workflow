@@ -7,9 +7,6 @@ An agent-agnostic skill for shipping one feature at a time through four separate
 3. **Implementer** makes the smallest code and test changes.
 4. **Tester** independently verifies the result and records evidence.
 
-There is no npm installer, Claude plugin, Codex plugin, or generated package in this repo.
-The workflow is plain instructions that any capable coding agent can read and follow.
-
 ## Quickstart
 
 Give your agent this repository, then prompt it with:
@@ -22,6 +19,10 @@ check passes and the final evidence is recorded.
 ```
 
 For a longer prompt, use [prompts/run-feature.md](prompts/run-feature.md).
+
+For a broader repo setup pattern around agent instructions, harnesses, and project structure,
+see the [harness engineering template](https://github.com/Stephen-Kimoi/harness-engineering-template).
+It is useful companion material, but this workflow does not require it.
 
 ## Files
 
