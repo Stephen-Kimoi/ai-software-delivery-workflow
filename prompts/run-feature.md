@@ -23,7 +23,9 @@ Run the work as four separate phases:
 3. Implementer: make the smallest code and test changes needed for the verified plan. Do not mark
    the feature passing.
 4. Tester: independently rerun every executable check. For UI behavior, capture evidence-driven
-   testing proof with annotated assertions. Update feature state and DECISIONS.md only according
+   testing proof with annotated assertions. If posting to a GitHub PR, include an inline-viewable
+   GIF embed using an absolute `https://github.com/<org>/<repo>/raw/<commit>/<path>.gif` URL, and
+   keep the MP4 as the full-quality artifact. Update feature state and DECISIONS.md only according
    to real evidence.
 
 Do not claim success unless every required check passes. If any required check cannot run, leave
