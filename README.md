@@ -1,100 +1,57 @@
-# Turn-based loop: Planner → Verifier → Implementer → Tester
+# Four-Agent Feature Workflow
 
-A Claude Code workflow that ships one feature at a time through four independent roles:
-1. **Planner** locks a design
-2. **Verifier** checks it before code exists
-3. **Implementer** builds it in an isolated [worktree](https://code.claude.com/docs/en/worktrees)
-4. **Tester** independently re-verifies and is the only role allowed to mark the feature "passing." No role trusts the previous role's self-report.
+An agent-agnostic skill for shipping one feature at a time through four separate roles:
 
-## Requirements
+1. **Planner** locks the design.
+2. **Verifier** checks the plan before code exists.
+3. **Implementer** makes the smallest code and test changes.
+4. **Tester** independently verifies the result and records evidence.
 
-- Claude Code with the `Workflow` tool (agent/phase/worktree-isolation primitives)
-- `jq` (`brew install jq` / `apt install jq`)
-- A repo with a `Makefile` exposing `format` and `lint` targets
-- `git`
+There is no npm installer, Claude plugin, Codex plugin, or generated package in this repo.
+The workflow is plain instructions that any capable coding agent can read and follow.
 
 ## Quickstart
 
-Choose the entry point that matches your host:
-
-- **npm (recommended):** run `npx create-feature-4agent@latest` in the target repo. This installs the workflow, verifier, starter `feature_list.json`, `AGENTS.md`, and `DECISIONS.md` without overwriting existing files.
-- **Claude Code plugin:** install the plugin:
-  ```bash
-  claude plugin install feature-4agent@turn-based-loop-workflow
-  ```
-  If this is your first time using the marketplace, run this once first:
-  ```bash
-  claude plugin marketplace add Stephen-Kimoi/turn-based-loop-workflow
-  ```
-  Then run `/feature-4agent:init` and `/feature-4agent:run F01`.
-- **Codex plugin:** install the Codex adapter:
-  ```bash
-  codex plugin add feature-4agent-codex@turn-based-loop-workflow
-  ```
-  If this is your first time using the marketplace, run this once first:
-  ```bash
-  codex plugin marketplace add https://github.com/Stephen-Kimoi/turn-based-loop-workflow
-  ```
-  Then use the `init`, `run`, and `verify` skills. Codex executes the same contract natively; it does not depend on Claude's `Workflow` tool.
-
-The workflow returns `{ status: 'implemented', ... }` on success or `{ status: 'blocked_at_plan', ... }` if the Verifier couldn't sign off within 6 rounds.
-
-## Using the workflow
-
-After installation, add a feature to `feature_list.json`, then send this end-to-end prompt:
+Give your agent this repository, then prompt it with:
 
 ```text
-Use the feature-4agent workflow end to end for feature F01 (or describe the feature here). Read feature_list.json, AGENTS.md, and DECISIONS.md; have the Planner create the plan, the Verifier approve
-executable checks, the Implementer make the changes, and the Tester independently run
-all checks and record the result. Do not claim success unless every check passes and
-F01 is marked passing by the verification harness.
+Use the four-agent feature workflow in SKILL.md for feature F01.
+Read the referenced files before acting. Plan, verify the plan, implement the
+feature, and independently test it. Do not claim success unless every executable
+check passes and the final evidence is recorded.
 ```
 
-For example, `feature_list.json` might contain:
+For a longer prompt, use [prompts/run-feature.md](prompts/run-feature.md).
 
-```json
-{
-  "id": "F01",
-  "behavior": "Add a health endpoint that returns HTTP 200 and {\"status\":\"ok\"}.",
-  "state": "active",
-  "verification": "curl -fsS http://localhost:3000/health | jq -e '.status == \"ok\"'"
-}
-```
+## Files
 
-Run it with your host agent:
-
-- **Claude Code:** `/feature-4agent:run F01`
-- **Codex:** `Use the feature-4agent workflow to plan, verify, implement, and test feature F01.`
-
-Then verify independently:
-
-```text
-Verify feature F01. Run every executable verification layer, report the evidence,
-and do not mark it passing unless all layers succeed.
-```
-
-## File structure: 
-
-| File | Role |
+| File | Purpose |
 |---|---|
-| `.claude/workflows/feature-4agent.js` | The workflow: Planner/Verifier/Implementer/Tester, JSON-schema'd outputs, round-capped Verifier loop, worktree-isolated Implementer |
-| `scripts/verify-feature.sh` | Runs a feature's verification layers in order; the only thing allowed to flip `state` to `passing` |
-| `feature_list.example.json` | Schema reference — copy to `feature_list.json` and replace with your own features |
-| `DECISIONS.example.md` | Why the Tester never trusts the Implementer's self-report, and why `cmd` must be real bash, not prose — worked incident + fix |
+| [SKILL.md](SKILL.md) | Main workflow entry point for agents |
+| [references/role-contract.md](references/role-contract.md) | Responsibilities and handoff rules for each role |
+| [references/feature-tracking.md](references/feature-tracking.md) | `feature_list.json` schema and state rules |
+| [references/verification-harness.md](references/verification-harness.md) | Harness-controlled verification contract |
+| [references/evidence-driven-testing.md](references/evidence-driven-testing.md) | UI evidence workflow adapted from evidence-driven testing |
+| [prompts/run-feature.md](prompts/run-feature.md) | Copyable end-to-end prompt |
+| [feature_list.example.json](feature_list.example.json) | Example feature tracking file |
+| [DECISIONS.example.md](DECISIONS.example.md) | Example decisions and verification incident log |
+| [scripts/verify-feature.sh](scripts/verify-feature.sh) | Optional bash harness an agent can copy into a target repo |
 
-## Why the roles don't trust each other
+## How To Use In Another Repository
 
-Short version, full incident in `DECISIONS.example.md`: a feature was once hand-marked
-`"passing"` with fabricated evidence, and it went undetected for days because nothing
-independently re-checked it. That's why only `verify-feature.sh` can write `"passing"`, the
-Implementer can't touch `state` or commit, and the Tester re-derives results independently
-instead of trusting the Implementer's report.
+1. Add a `feature_list.json` entry for the feature, or let the Planner create one.
+2. Add a `DECISIONS.md` file, or use `DECISIONS.example.md` as the starting shape.
+3. Ask the agent to read `SKILL.md` and follow the referenced files.
+4. If the feature changes UI behavior, require the evidence-driven testing layer.
+5. Keep `state: "passing"` reserved for verified evidence, never a self-report.
 
-## When not to use this
+## Why The Roles Do Not Trust Each Other
 
-Overkill for a one-off task or a prototype. It pays off on a *recurring* feature-shipping loop,
-once you've noticed yourself retyping the same verification steps by hand every time.
+The workflow exists because feature state can be falsified accidentally or intentionally if
+an agent hand-edits a tracker. The Tester must independently run the checks, capture real
+evidence, and only then record the outcome. For UI work, the Tester should also collect
+screen-recorded evidence with structured annotations.
 
 ## License
 
-MIT — see `LICENSE`.
+MIT, see [LICENSE](LICENSE).

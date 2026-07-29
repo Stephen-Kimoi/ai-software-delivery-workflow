@@ -2,8 +2,8 @@
 # verify-feature.sh — harness-controlled feature state transition
 # Usage: ./scripts/verify-feature.sh <FEATURE_ID> [feature_list.json]
 #
-# The agent MUST use this script to advance a feature to "passing".
-# It must never hand-edit feature_list.json's state field directly —
+# This optional harness shows one concrete way to advance a feature to "passing".
+# An agent must never hand-edit feature_list.json's state field directly —
 # see DECISIONS.example.md's case study: a feature was marked "passing"
 # with fabricated evidence via a manual JSON edit, and it went undetected
 # for days because nothing had actually run the verification.
