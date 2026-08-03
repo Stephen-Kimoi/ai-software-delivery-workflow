@@ -28,7 +28,7 @@ Allowed states:
 
 - `not_started`: the feature is known but not ready to plan.
 - `planned`: a design exists but implementation should not start yet.
-- `active`: the feature is ready for the four-agent loop.
+- `active`: the feature is ready for the AI software delivery workflow.
 - `blocked`: progress requires external input or another dependency.
 - `passing`: every required check passed and evidence was recorded.
 

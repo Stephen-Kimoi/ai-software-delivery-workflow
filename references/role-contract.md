@@ -68,3 +68,25 @@ The Tester must:
 - Record a `DECISIONS.md` entry with implementation summary, verification evidence, and gaps.
 
 The Tester is the only role that can report final success.
+
+## Goal Verification Handoff
+
+The Goal Verification Handoff is not a fifth implementation role. It is the final handoff from
+the turn-based build loop into an optional goal-based completion loop.
+
+After the Tester finishes, produce a copyable `/goal` prompt when the task has a clear finish
+line. The prompt should let the user run a final autonomous audit without rewriting the whole
+task.
+
+Generate the handoff when the task involves any of these:
+
+- Pull request readiness
+- Evidence-driven testing
+- Multiple acceptance criteria
+- Multi-file implementation
+- External system checks
+- Live-system constraints such as "do not merge" or "do not deploy"
+- A diagnostic outcome where success means "artifact found" or "blocker proven"
+
+Skip the handoff only when `/goal` would be obvious overkill, such as a small one-file edit with
+no PR, no external evidence, and no remaining verification checklist.
