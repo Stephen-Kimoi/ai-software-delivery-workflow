@@ -1,0 +1,24 @@
+# Provider profile for the optional multi-provider runner.
+# The core workflow remains usable without this file.
+version: 1
+
+roles:
+  planner:
+    provider: claude-code
+    model: claude-opus-5
+    mode: read-only
+  verifier:
+    provider: claude-code
+    model: claude-opus-5
+    mode: read-only
+  implementer:
+    provider: codex
+    model: gpt-5.6-luna
+    mode: write
+  tester:
+    provider: codex
+    model: gpt-5.6-sol
+    mode: verify
+
+artifacts_dir: .artifacts
+max_verifier_rounds: 6

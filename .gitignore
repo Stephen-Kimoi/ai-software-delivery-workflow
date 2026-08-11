@@ -1,0 +1,2 @@
+# Runtime handoff artifacts are evidence for a feature run, not workflow source.
+.artifacts/
