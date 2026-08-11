@@ -43,6 +43,30 @@ For a broader repo setup pattern around agent instructions, harnesses, and proje
 see the [harness engineering template](https://github.com/Stephen-Kimoi/harness-engineering-template).
 It is useful companion material, but this workflow does not require it.
 
+## Optional Multi-Provider Runner
+
+The core workflow remains agent-agnostic. The optional `workflow/roles.yaml` profile assigns
+Planner and Verifier to Claude Opus 5, Implementer to GPT-5.6 Luna through Codex, and Tester
+to GPT-5.6 Sol through Codex. Run a safe command preview with:
+
+```bash
+python3 scripts/run-workflow.py F01 --repo-root /path/to/application --feature-file feature_list.json
+```
+
+Use `--mock` to test the complete four-role orchestration without provider calls. Pass
+`--execute` only after both CLIs are installed and authenticated. The runner writes one artifact
+directory per feature under `.artifacts/<FEATURE_ID>/`, validates every role output against
+`workflow/schemas/`, and stops if the Verifier rejects the plan. Models can be overridden with
+`WORKFLOW_<ROLE>_MODEL` environment variables; provider-specific adapter commands are
+intentionally kept out of the core role contracts.
+
+```bash
+python3 scripts/run-workflow.py F01 --repo-root /path/to/application --execute
+```
+
+If implementation must be retried after an approved plan, add `--resume-after-verifier` to reuse
+the validated Planner and Verifier artifacts rather than paying to repeat those phases.
+
 ## Files
 
 | File | Purpose |
@@ -57,6 +81,9 @@ It is useful companion material, but this workflow does not require it.
 | [feature_list.example.json](feature_list.example.json) | Example feature tracking file |
 | [DECISIONS.example.md](DECISIONS.example.md) | Example decisions and verification incident log |
 | [scripts/verify-feature.sh](scripts/verify-feature.sh) | Optional bash harness an agent can copy into a target repo |
+| [workflow/roles.yaml](workflow/roles.yaml) | Optional multi-provider model profile |
+| [scripts/run-workflow.py](scripts/run-workflow.py) | Dry-run/execute runner for provider adapters |
+| [workflow/schemas/](workflow/schemas/) | Required JSON fields and types for each role handoff |
 
 ## How To Use In Another Repository
 

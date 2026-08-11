@@ -1,0 +1,9 @@
+{
+  "required": ["changed_files", "commands_run", "deviations", "remaining_risks"],
+  "types": {
+    "changed_files": "array",
+    "commands_run": "array",
+    "deviations": "array",
+    "remaining_risks": "array"
+  }
+}

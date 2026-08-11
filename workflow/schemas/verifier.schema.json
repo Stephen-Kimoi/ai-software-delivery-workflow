@@ -1,0 +1,8 @@
+{
+  "required": ["approved", "blockers", "required_revisions"],
+  "types": {
+    "approved": "boolean",
+    "blockers": "array",
+    "required_revisions": "array"
+  }
+}

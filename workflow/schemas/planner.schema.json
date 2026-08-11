@@ -1,0 +1,11 @@
+{
+  "required": ["plan_summary", "rationale", "files_to_change", "edge_cases", "test_plan", "open_questions_resolved"],
+  "types": {
+    "plan_summary": "string",
+    "rationale": "string",
+    "files_to_change": "array",
+    "edge_cases": "array",
+    "test_plan": "array",
+    "open_questions_resolved": "array"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "required": ["final_state", "commands", "results", "skipped_checks", "gaps"],
+  "types": {
+    "final_state": "string",
+    "commands": "array",
+    "results": "array",
+    "skipped_checks": "array",
+    "gaps": "array"
+  }
+}
