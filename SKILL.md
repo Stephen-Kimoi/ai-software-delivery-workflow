@@ -32,7 +32,8 @@ Before starting work, read these files in order:
 2. `references/feature-tracking.md`
 3. `references/verification-harness.md`
 4. `references/goal-verification-handoff.md`
-5. `references/evidence-driven-testing.md` when the feature changes UI behavior
+5. `references/evidence-driven-testing.md` when the feature changes user-observable UI, API,
+   CLI, or background-processing behavior that benefits from recorded evidence
 6. The target repository's `feature_list.json`, `AGENTS.md` or equivalent agent instructions,
    and `DECISIONS.md` or equivalent decision log
 
@@ -65,8 +66,10 @@ the previous role's self-report; it must inspect files and evidence directly.
 - If a check cannot be run, leave the feature `active` or mark it `blocked`; record the gap.
 - The Implementer does not commit and does not update the feature state.
 - The Tester owns final verification evidence and the final state update.
-- For UI behavior, use evidence-driven testing: record the tested flow, annotate assertions, and
-  report the exact commit, environment, results, and caveats.
+- For user-observable behavior, use the appropriate evidence surface: record the real UI flow,
+  execute HTTP APIs through Swagger UI when available, record CLI interaction, or show a
+  background job's source-of-truth result. Annotate assertions and report the exact commit,
+  environment, results, and caveats. Recorded evidence supplements executable tests.
 - After Tester, produce a recommended `/goal` prompt unless the task is too small or has no
   verifiable follow-up state. If you skip it, say why.
 
@@ -77,7 +80,8 @@ A feature is done only when:
 - The Verifier approved the plan before implementation.
 - The Implementer changed only the files needed for the verified plan, or documented deviations.
 - The Tester independently ran every executable check.
-- UI changes include recorded evidence when a GUI environment is available.
+- User-observable UI, API, CLI, or background-processing changes include recorded evidence when
+  a suitable interaction surface is available.
 - `feature_list.json` records a truthful state and evidence.
 - `DECISIONS.md` records the implementation, verification, and any remaining gaps.
 - The final response includes a Goal Verification Handoff, or explicitly explains why `/goal`

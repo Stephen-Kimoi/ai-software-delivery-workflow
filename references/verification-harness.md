@@ -53,5 +53,6 @@ The Tester report should include:
 - The exact commands run.
 - A pass/fail result for each layer.
 - Any skipped or untestable checks with reasons.
-- Links or paths to UI recordings when evidence-driven testing applies.
+- Links or paths to interaction-surface recordings when evidence-driven testing applies,
+  including executed Swagger UI flows for HTTP APIs when available.
 - A recommended `/goal` verification prompt, or a short explanation that `/goal` is unnecessary.

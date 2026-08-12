@@ -67,7 +67,8 @@ Iteration cap:
 Completion is true only when:
 - the implementation matches the verified plan
 - every required test/check has passed or a blocker is explicitly evidenced
-- evidence-driven testing is attached when UI behavior changed
+- evidence-driven testing is attached when user-observable UI, API, CLI, or background-processing
+  behavior changed; API evidence shows an executed Swagger UI flow when available
 - the PR description includes acceptance criteria, verification commands, and evidence links
 - mergeability has been checked
 - no merge or deployment has been performed
