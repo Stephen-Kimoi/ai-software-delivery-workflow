@@ -39,6 +39,18 @@ check passes and the final evidence is recorded.
 
 For a longer prompt, use [prompts/run-feature.md](prompts/run-feature.md).
 
+## Copyable Prompts
+
+- [Review a backend API PR](prompts/review-backend-api-pr.md) — generic read-only PR review with
+  executable verification and recorded Swagger UI evidence.
+- [Review a specific backend API PR](prompts/review-specific-backend-api-pr.md) — expanded review
+  template using placeholders for the PR URL, PR number, and feature name.
+- [Implement a feature with the multi-provider runner](prompts/run-feature-multi-provider.md) —
+  natural-language feature request routed through Opus Planner/Verifier and Codex
+  Implementer/Tester.
+- [Implement a feature with the cost-balanced runner](prompts/run-feature-multi-provider-budget.md)
+  — lower-cost Sonnet Planner/Verifier and Luna/Terra Codex Implementer/Tester.
+
 For a broader repo setup pattern around agent instructions, harnesses, and project structure,
 see the [harness engineering template](https://github.com/Stephen-Kimoi/harness-engineering-template).
 It is useful companion material, but this workflow does not require it.
@@ -67,6 +79,20 @@ python3 scripts/run-workflow.py F01 --repo-root /path/to/application --execute
 If implementation must be retried after an approved plan, add `--resume-after-verifier` to reuse
 the validated Planner and Verifier artifacts rather than paying to repeat those phases.
 
+For a lower-cost run, use `workflow/roles-budget.yaml`. This profile assigns Planner and Verifier
+to Claude Sonnet 5, Implementer to GPT-5.6 Luna through Codex, and Tester to GPT-5.6 Terra through
+Codex:
+
+```bash
+python3 scripts/run-workflow.py F01 \
+  --repo-root /path/to/application \
+  --profile workflow/roles-budget.yaml \
+  --execute
+```
+
+The corresponding copyable prompt is
+[prompts/run-feature-multi-provider-budget.md](prompts/run-feature-multi-provider-budget.md).
+
 ## Files
 
 | File | Purpose |
@@ -78,10 +104,15 @@ the validated Planner and Verifier artifacts rather than paying to repeat those 
 | [references/evidence-driven-testing.md](references/evidence-driven-testing.md) | Recorded evidence for UI, Swagger/API, CLI, and background flows |
 | [references/goal-verification-handoff.md](references/goal-verification-handoff.md) | How to generate a `/goal` prompt after the build loop |
 | [prompts/run-feature.md](prompts/run-feature.md) | Copyable end-to-end prompt |
+| [prompts/review-backend-api-pr.md](prompts/review-backend-api-pr.md) | Generic backend API PR review prompt |
+| [prompts/review-specific-backend-api-pr.md](prompts/review-specific-backend-api-pr.md) | Placeholder-driven backend API PR review prompt |
+| [prompts/run-feature-multi-provider.md](prompts/run-feature-multi-provider.md) | Multi-provider feature implementation prompt |
+| [prompts/run-feature-multi-provider-budget.md](prompts/run-feature-multi-provider-budget.md) | Cost-balanced multi-provider feature implementation prompt |
 | [feature_list.example.json](feature_list.example.json) | Example feature tracking file |
 | [DECISIONS.example.md](DECISIONS.example.md) | Example decisions and verification incident log |
 | [scripts/verify-feature.sh](scripts/verify-feature.sh) | Optional bash harness an agent can copy into a target repo |
 | [workflow/roles.yaml](workflow/roles.yaml) | Optional multi-provider model profile |
+| [workflow/roles-budget.yaml](workflow/roles-budget.yaml) | Cost-balanced multi-provider model profile |
 | [scripts/run-workflow.py](scripts/run-workflow.py) | Dry-run/execute runner for provider adapters |
 | [workflow/schemas/](workflow/schemas/) | Required JSON fields and types for each role handoff |
 

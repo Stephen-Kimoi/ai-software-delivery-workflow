@@ -1,0 +1,25 @@
+# Cost-balanced provider profile for the optional multi-provider runner.
+# It avoids the highest-cost models while retaining stronger models for
+# planning, independent verification, and the final test gate.
+version: 1
+
+roles:
+  planner:
+    provider: claude-code
+    model: claude-sonnet-5
+    mode: read-only
+  verifier:
+    provider: claude-code
+    model: claude-sonnet-5
+    mode: read-only
+  implementer:
+    provider: codex
+    model: gpt-5.6-luna
+    mode: write
+  tester:
+    provider: codex
+    model: gpt-5.6-terra
+    mode: verify
+
+artifacts_dir: .artifacts
+max_verifier_rounds: 6
