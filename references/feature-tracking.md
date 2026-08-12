@@ -47,6 +47,8 @@ Prefer layers over a single command for non-trivial features:
 
 1. Static checks: formatting, linting, type checks.
 2. Unit or integration behavior checks.
-3. Boundary, persistence, distributed, deployment, or UI evidence checks as needed.
+3. Boundary, persistence, distributed, deployment, or interaction-surface evidence checks as
+   needed. For HTTP APIs, this can include a recorded Swagger UI execution in addition to
+   automated API or contract tests.
 
 Each layer must be specific enough that a different agent can run it and know whether it passed.

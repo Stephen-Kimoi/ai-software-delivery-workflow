@@ -287,10 +287,14 @@ def main() -> int:
 
     tester_prompt = (
         "Act as the independent Tester for the AI software delivery workflow. Read the feature "
-        f"input, plan, implementation report, and current repository from {artifact_dir}. Re-run "
+        f"input, plan, implementation report, current repository from {artifact_dir}, and the "
+        f"evidence contract at {WORKFLOW_ROOT / 'references' / 'evidence-driven-testing.md'}. Re-run "
         "every executable check. Update feature_list.json and DECISIONS.md only according to real "
         "evidence: set passing only if every required check passes; otherwise keep the feature "
-        "active or blocked and record the gaps. Return only JSON matching "
+        "active or blocked and record the gaps. For user-observable behavior, capture evidence on "
+        "the appropriate interaction surface; for HTTP APIs, use an executed Swagger UI flow when "
+        "available, without exposing secrets, and never substitute it for automated tests. Return "
+        "only JSON matching "
         f"{SCHEMA_ROOT / 'tester.schema.json'}. Required fields: final_state (string), "
         "commands (array), results (array), skipped_checks (array), gaps (array). No Markdown "
         "or commentary. You alone may recommend passing."

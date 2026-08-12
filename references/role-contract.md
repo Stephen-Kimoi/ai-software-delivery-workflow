@@ -63,7 +63,10 @@ The Tester must:
 - Re-read the implementation and relevant tests.
 - Re-run every executable verification layer.
 - Use a different verification angle where practical.
-- For UI work, capture evidence following `references/evidence-driven-testing.md`.
+- For user-observable UI, API, CLI, or background-processing work, capture evidence using the
+  appropriate interaction surface from `references/evidence-driven-testing.md`. For HTTP APIs,
+  prefer an executed Swagger UI flow when available; do not treat the documentation page itself
+  as proof and do not replace automated tests with recorded evidence.
 - Update feature evidence only after checks actually run.
 - Record a `DECISIONS.md` entry with implementation summary, verification evidence, and gaps.
 

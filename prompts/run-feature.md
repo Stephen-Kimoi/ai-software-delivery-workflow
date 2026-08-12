@@ -11,7 +11,8 @@ Read these files before acting:
 - references/feature-tracking.md
 - references/verification-harness.md
 - references/goal-verification-handoff.md
-- references/evidence-driven-testing.md if the feature changes UI behavior
+- references/evidence-driven-testing.md if the feature changes user-observable UI, API, CLI, or
+  background-processing behavior
 - feature_list.json or feature_list.example.json
 - AGENTS.md or the repo's equivalent agent instructions, if present
 - DECISIONS.md or DECISIONS.example.md
@@ -23,11 +24,14 @@ Run the work as separate phases:
    Loop back to Planner until the plan is executable or blocked.
 3. Implementer: make the smallest code and test changes needed for the verified plan. Do not mark
    the feature passing.
-4. Tester: independently rerun every executable check. For UI behavior, capture evidence-driven
-   testing proof with annotated assertions. If posting to a GitHub PR, include an inline-viewable
-   GIF embed using an absolute `https://github.com/<org>/<repo>/raw/<commit>/<path>.gif` URL, and
-   keep the MP4 as the full-quality artifact. Update feature state and DECISIONS.md only according
-   to real evidence.
+4. Tester: independently rerun every executable check. Capture evidence-driven testing proof on
+   the appropriate interaction surface: the real UI, Swagger UI for HTTP APIs when available,
+   the terminal for CLI behavior, or the source-of-truth view for background processing. For
+   Swagger UI, execute the request and show the method, endpoint, environment, safe request data,
+   status, response, and required error cases. Recorded evidence supplements automated tests. If
+   posting to a GitHub PR, include an inline-viewable GIF embed using an absolute
+   `https://github.com/<org>/<repo>/raw/<commit>/<path>.gif` URL, and keep the MP4 as the
+   full-quality artifact. Update feature state and DECISIONS.md only according to real evidence.
 5. Goal Verification Handoff: after testing, generate a copyable /goal prompt the user can run for
    final completion audit. The prompt should verify that the feature is implemented, tested,
    evidenced, documented, and PR-ready. If /goal is overkill for this feature, explain why.

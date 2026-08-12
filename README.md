@@ -75,7 +75,7 @@ the validated Planner and Verifier artifacts rather than paying to repeat those 
 | [references/role-contract.md](references/role-contract.md) | Responsibilities and handoff rules for each role |
 | [references/feature-tracking.md](references/feature-tracking.md) | `feature_list.json` schema and state rules |
 | [references/verification-harness.md](references/verification-harness.md) | Harness-controlled verification contract |
-| [references/evidence-driven-testing.md](references/evidence-driven-testing.md) | UI evidence workflow adapted from evidence-driven testing |
+| [references/evidence-driven-testing.md](references/evidence-driven-testing.md) | Recorded evidence for UI, Swagger/API, CLI, and background flows |
 | [references/goal-verification-handoff.md](references/goal-verification-handoff.md) | How to generate a `/goal` prompt after the build loop |
 | [prompts/run-feature.md](prompts/run-feature.md) | Copyable end-to-end prompt |
 | [feature_list.example.json](feature_list.example.json) | Example feature tracking file |
@@ -90,7 +90,9 @@ the validated Planner and Verifier artifacts rather than paying to repeat those 
 1. Add a `feature_list.json` entry for the feature, or let the Planner create one.
 2. Add a `DECISIONS.md` file, or use `DECISIONS.example.md` as the starting shape.
 3. Ask the agent to read `SKILL.md` and follow the referenced files.
-4. If the feature changes UI behavior, require the evidence-driven testing layer.
+4. If the feature changes user-observable UI, API, CLI, or background-processing behavior,
+   require the appropriate evidence-driven testing layer. For HTTP APIs, use an executed Swagger
+   UI flow when available, alongside automated tests.
 5. Ask the Tester to produce a Goal Verification Handoff when the work has a clear finish line.
 6. Keep `state: "passing"` reserved for verified evidence, never a self-report.
 
@@ -98,8 +100,10 @@ the validated Planner and Verifier artifacts rather than paying to repeat those 
 
 The workflow exists because feature state can be falsified accidentally or intentionally if
 an agent hand-edits a tracker. The Tester must independently run the checks, capture real
-evidence, and only then record the outcome. For UI work, the Tester should also collect
-screen-recorded evidence with structured annotations.
+evidence, and only then record the outcome. For user-observable work, the Tester should also
+collect screen-recorded evidence with structured annotations. For HTTP APIs, Swagger UI can provide the
+recorded interaction surface when the evidence shows the actual request, response, environment,
+and required error cases; viewing API documentation alone is not proof.
 
 ## Why `/goal` Is A Handoff, Not A Fifth Role
 
